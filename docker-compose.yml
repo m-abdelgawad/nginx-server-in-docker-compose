@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+
+  nginx_server:
+    container_name: nginx_server
+    image: nginx_server
+    build: ./
+    volumes:
+
+      # Automagic Developer Domain SSL Certificate
+      - /home/mohamed/automagic-stack/mounts/letsencrypt:/etc/letsencrypt
+
+      # Automagic Developer Portfolio
+      - automagic-stack_static:/portfolio-static
+      - /home/mohamed/automagic-stack/mounts/automagic_media:/portfolio-media
+
+      # TodoWoo Website
+      - todowoo-stack_static:/todowoo-static
+      - todowoo-stack_media:/todowoo-media
+
+    ports:
+      - 80:80
+      - 443:443
+
+    networks:
+      - frontend
+
+    restart: always
+
+volumes:
+  automagic-stack_static:
+    name: automagic-stack_static
+  todowoo-stack_static:
+    name: todowoo-stack_static
+  todowoo-stack_media:
+    name: todowoo-stack_media
+
+networks:
+  frontend:
+    name: frontend
+    driver: bridge
